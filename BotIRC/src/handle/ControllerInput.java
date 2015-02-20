@@ -1,5 +1,7 @@
 package handle;
 
+
+import functions.Replacer;
 import log.LogController;
 import rede.Sims;
 import rede.RoboEd;
@@ -12,20 +14,22 @@ public class ControllerInput extends HandleSocket {
 	private RoboEd r;
 	private Sims f;
 	private LogController lc;
+	private Replacer replacer; 
 	private boolean isEd;
-
+	
 	public ControllerInput() {
 		isEd = true;
 		r = new RoboEd();
 		f = new Sims();
 		lc = new LogController();
+		replacer = new Replacer(); 
 	}
 
 	@Override
 	public void onMessage(Messager msg, SocketIRC si) {
 		// 1 Testar a origem da mensagem: privada ou não;
 		// 2 Ações disponíveis para uso do chato público.
-
+		
 		// Tratando mensagens privadas.
 		if (isPrivate(msg)) {
 
@@ -62,7 +66,9 @@ public class ControllerInput extends HandleSocket {
 			lc.addToLog(msg, m);
 			return;
 		}
-
+		// Alimenteando Array do Replacer; 
+		replacer.feedStore(msg);
+		
 		// Notificação para as pessoas que estão usando o marcador antigo.
 		if (msg.getMsg().startsWith("!J")) {
 			si.sendMessage(msg.getChannel(), "" + msg.getNick() + " você pode usar apenas '.' no início da frase invés de '!J'. Mais fácil né :p");
@@ -91,6 +97,13 @@ public class ControllerInput extends HandleSocket {
 		// Mudar o nick do bot via comando de chat
 		if (msg.getMsg().startsWith("!ChangeNick") && msg.getUser().equals(superUser)) {
 			si.changeNick(msg.getMsg().substring(11));
+		}
+		
+		//replace[nickName] ..., ..., /...,....
+		if(msg.getMsg().startsWith("replace[") ){
+			String text = replacer.replacer(msg); 
+			if(text != null)
+			si.sendMessage(msg.getChannel(),text);
 		}
 	}
 

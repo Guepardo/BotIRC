@@ -18,7 +18,7 @@ public class Main {
 	public static void main(String[] args) throws UnsupportedEncodingException {
 
 		// MessageFactory.createMessage(":Jaguar!Jaguar@D34913.6396D4.328BC8.EF30E9 PRIVMSG #brasil :nada");
-		SocketIRC si = new SocketIRC("irc.icq.com", "#portuguese", "Emanuella", null, new ControllerInput());
+		SocketIRC si = new SocketIRC("irc.icq.com", "#nada", "Jeova", null, new ControllerInput());
 
 		// SocketIRC si = new
 		// SocketIRC("irc.icq.com","#brasil","JustATest",null, null);
